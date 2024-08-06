@@ -28,23 +28,26 @@ def home():
         create = request.form.get("create", False)
 
         if not name:
-            return render_template('home.html', error="Please enter a name.", code=code, name=name)
+            return render_template('home.html', error="Please enter a name.", code=code, name=name, all_rooms=rooms)
 
         if join != False and not code:
-            return render_template('home.html', error="Please enter a room code.", code=code, name=name)
+            return render_template('home.html', error="Please enter a room code.", code=code, name=name, all_rooms=rooms)
+        
+        if code:
+            code = code.upper()
         
         room = code
         if create != False:
             room = generate_unique_code(4)
             rooms[room] = {"members": 0, "messages": []}
         elif code not in rooms:
-            return render_template('home.html', error="Room does not exist.", code=code, name=name)
+            return render_template('home.html', error="Room does not exist.", code=code, name=name, all_rooms=rooms)
         
         session["room"] = room
         session["name"] = name
         return redirect(url_for("room"))
 
-    return render_template('home.html')
+    return render_template('home.html', all_rooms=rooms)
 
 @app.route("/room")
 def room():

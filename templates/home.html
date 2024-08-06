@@ -11,6 +11,25 @@
         <button type="submit" name="join">Join a Room</button>
     </div>
     <button type="submit" name="create" class="create-btn">Create a Room</button>
+
+    <div class="rooms-table">
+        <h3>Available Chat Rooms:</h3>
+        <table>
+            <tbody>
+                {% for room in all_rooms %}
+                <tr>
+                    <td>{{ room }} | {{all_rooms[room]['members']}} member(s)</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td>No rooms available</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
     {% if error %}
     <ul>
         <li>{{error}}</li>
