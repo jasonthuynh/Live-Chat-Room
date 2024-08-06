@@ -34,6 +34,7 @@ def home():
             return render_template('home.html', error="Please enter a room code.", code=code, name=name, all_rooms=rooms)
         
         if code:
+            code = code.strip()
             code = code.upper()
         
         room = code
@@ -54,7 +55,7 @@ def room():
     room = session.get("room")
     if room == None or session.get("name") == None or room not in rooms:
         return redirect(url_for("home"))
-    return render_template("room.html", roomCode=room, messages=rooms[room]["messages"])
+    return render_template("room.html", roomCode=room, messages=rooms[room]["messages"], allRooms=rooms)
 
  
 @socketio.on("message")
@@ -101,7 +102,16 @@ def disconnect():
 
     send({"name": name, "message": "has left the room"}, to=room)
 
-
+@socketio.on("leave")
+def handle_leave(data):
+    room = data.get("room")
+    name = session.get("name")
+    if room in rooms:
+        leave_room(room)
+        rooms[room]["members"] -= 1
+        if rooms[room]["members"] <= 0:
+            del rooms[room]
+        send({'name': name, "message": "has left the room"}, to=room)
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)

@@ -3,6 +3,7 @@
 
 <div class="message-box">
     <h2>Chat Room: {{roomCode}}</h2>
+    <button class="leave-btn" id="leave-btn" name="leave" onclick="leaveRoom()">Leave</button>
     <div class="messages" id="messages"></div>
     <div class="inputs">
         <input type="text" rows="3" placeholder="Message" name="message" id="message"/>
@@ -40,6 +41,11 @@
         socketio.emit("message", {data: message.value})
         message.value = "";
     };
+
+    const leaveRoom = () => {
+        socketio.emit("leave", { room: "{{ roomCode }}" });
+        window.location.href = "/";
+    }
 
     document.getElementById("message").addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
