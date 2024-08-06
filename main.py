@@ -69,7 +69,7 @@ def message(data):
     }
     send(content, to=room)
     rooms[room]["messages"].append(content)
-    print(f"{session.get('name')} said: {data['data']}")
+
 
 
 
@@ -86,7 +86,7 @@ def connect(auth):
     join_room(room)
     send({"name": name, "message": "has entered the room"}, to=room)
     rooms[room]["members"] += 1
-    print(f"{name} joined room {room}")
+
 
 @socketio.on("disconnect")
 def disconnect():
@@ -100,7 +100,7 @@ def disconnect():
             del rooms[room]
 
     send({"name": name, "message": "has left the room"}, to=room)
-    print(f"{name} left room {room}")
+
 
 
 if __name__ == "__main__":

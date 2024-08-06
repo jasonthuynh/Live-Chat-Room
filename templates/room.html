@@ -30,9 +30,9 @@
         messages.innerHTML += content;
     };
 
-socketio.on("message", (data) => {
-    createMessage(data.name, data.message);
-});
+    socketio.on("message", (data) => {
+        createMessage(data.name, data.message);
+    });
 
     const sendMessage = () => {
         const message = document.getElementById("message")
@@ -40,6 +40,13 @@ socketio.on("message", (data) => {
         socketio.emit("message", {data: message.value})
         message.value = "";
     };
+
+    document.getElementById("message").addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
 </script>
 
 {% for msg in messages %}
